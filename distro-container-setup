@@ -2,18 +2,21 @@
 
 function setup_distro() {
     if [[ "$distro_answer" == "1" ]]; then
-    selected_distro="debian"
+        selected_distro="debian"
     elif [[ "$distro_answer" == "2" ]]; then
-    selected_distro="ubuntu"
+        selected_distro="ubuntu"
     elif [[ "$distro_answer" == "3" ]]; then
-    selected_distro="archlinux"
+        selected_distro="archlinux"
     elif [[ "$distro_answer" == "4" ]]; then
-    selected_distro="alpine"
+        selected_distro="alpine"
     elif [[ "$distro_answer" == "5" ]]; then
-    selected_distro="fedora"
+        selected_distro="fedora"
+    elif [[ "$distro_answer" == "6" ]]; then
+        selected_distro="ubuntu-ci-jammy"  # Adiciona o ubuntu-ci-jammy como a opção 6
     else
-    selected_distro="debian"
+        selected_distro="debian"
     fi
+    
     echo "selected_distro=\"$selected_distro\"" >> $config_file
     banner
     echo "${R}[${W}-${R}]${G}${BOLD}Installing ${C}proot-distro"${W}
