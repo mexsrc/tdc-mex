@@ -1,6 +1,5 @@
-# This Code Will Activate The Ubuntu Ci 
-#!/data/data/com.termux/files/usr/bin/bash
-
+ #!/data/data/com.termux/files/usr/bin/bash
+# This Code Will Activate The Ubuntu Ci
 release_code=${1:-"jammy"}
 
 now="$(date +%D)"
