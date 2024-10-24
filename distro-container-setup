@@ -12,7 +12,7 @@ function setup_distro() {
     elif [[ "$distro_answer" == "5" ]]; then
         selected_distro="fedora"
     elif [[ "$distro_answer" == "6" ]]; then
-        selected_distro="ubuntu-ci-jammy"  # Adiciona o ubuntu-ci-jammy como a opção 6
+        selected_distro="ubuntu-ci-jammy"  # Adiciona o ubuntu-ci-jammy como a opÃ§Ã£o 6
     else
         selected_distro="debian"
     fi
@@ -62,7 +62,7 @@ function pd_package_install_and_check() {
 #instll package
 for package_name in "${packs_list[@]}"; do
     echo "${R}[${W}-${R}]${G}${BOLD} Installing package: ${C}$package_name ${W}"
-    if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+    if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
     sudo apt install "$package_name" -y
     elif [[ "$ID" == arch* ]]; then
     sudo pacman -Sy --noconfirm "$package_name"
@@ -74,7 +74,7 @@ for package_name in "${packs_list[@]}"; do
 #handel error in installation
     if [ $? -ne 0 ]; then
         echo "${R}[${W}-${R}]${G}${BOLD} Error detected during installation of: ${C}$package_name ${W}"
-        if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+        if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
         sudo apt --fix-broken install -y
         sudo dpkg --configure -a
         sudo apt install "$package_name" -y
@@ -91,7 +91,7 @@ for package_name in "${packs_list[@]}"; do
         fi
     fi
 #reinstall
-if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
     if ! dpkg -s "$package_name" >/dev/null 2>&1; then
     sudo apt install "$package_name" -y
     fi
@@ -109,7 +109,7 @@ elif [[ "$ID" == "fedora" ]]; then
     fi
 fi
 #check installation
-if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
     if dpkg -s "$package_name" >/dev/null 2>&1; then
     echo "${R}[${W}-${R}]${G} $package_name installed successfully ${W}"
     else
@@ -155,7 +155,7 @@ function pd_root_package_install_and_check() {
 #instll package
 for package_name in "${packs_list[@]}"; do
     echo "${R}[${W}-${R}]${G}${BOLD} Installing package: ${C}$package_name ${W}"
-    if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+    if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
         apt install "$package_name" -y
     elif [[ "$ID" == arch* ]]; then
         pacman -Sy --noconfirm "$package_name"
@@ -167,7 +167,7 @@ for package_name in "${packs_list[@]}"; do
 #handel error in installation
     if [ $? -ne 0 ]; then
         echo "${R}[${W}-${R}]${G}${BOLD} Error detected during installation of: ${C}$package_name ${W}"
-        if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+        if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
         apt --fix-broken install -y
         dpkg --configure -a
         apt install "$package_name" -y
@@ -184,7 +184,7 @@ for package_name in "${packs_list[@]}"; do
         fi
     fi
 #reinstall
-if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
     if ! dpkg -s "$package_name" >/dev/null 2>&1; then
     apt install "$package_name" -y
     fi
@@ -202,7 +202,7 @@ elif [[ "$ID" == "fedora" ]]; then
     fi
 fi
 #check installation
-if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu" ]]; then
+if [[ "$ID" == "debian" ]] || [[ "$ID" == "ubuntu-ci-jammy" ]]; then
     if dpkg -s "$package_name" >/dev/null 2>&1; then
     echo "${R}[${W}-${R}]${G} $package_name installed successfully ${W}"
     else
@@ -243,7 +243,7 @@ function distro_basic_task() {
     banner
     echo "${R}[${W}-${R}]${G}${BOLD}Updating ${C}$selected_distro ${G}And Installing Required Packages"${W}
     echo
-    if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu" ]]; then
+    if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu-ci-jammy" ]]; then
     proot-distro login $selected_distro --shared-tmp -- env DISPLAY=:1.0 apt update
     proot-distro login $selected_distro --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
     elif [[ "$selected_distro" == "archlinux" ]]; then
@@ -454,7 +454,7 @@ EOF
 	banner
     echo "${R}[${W}-${R}]${C}${BOLD}Configuring Terminal Utility..."${W}
     echo
-    if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu" ]]; then
+    if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu-ci-jammy" ]]; then
 cat <<'EOF' > $distro_path/root/pd_setup.sh
 #!/bin/bash
 
@@ -612,7 +612,7 @@ cat <<EOF >> "$distro_path/root/.${pd_shell_name}rc"
 #set zoxide as cd
 eval "\$(zoxide init --cmd cd ${pd_shell_name})"
 EOF
-    if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu" ]]; then
+    if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu-ci-jammy" ]]; then
     if [[ "$pd_useradd_answer" == "y" ]]; then
 cat <<'EOF' >> "$distro_path/home/$final_user_name/.${pd_shell_name}rc"
 alias apt='sudo nala $@'
@@ -917,7 +917,7 @@ save_user_path="$distro_path/home/$final_user_name"
 fi
 save_root_path="$distro_path/root"
 
-if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu" ]]; then
+if [[ "$selected_distro" == "debian" ]] || [[ "$selected_distro" == "ubuntu-ci-jammy" ]]; then
 handel_debian_based_app_installer
 elif [[ "$selected_distro" == "archlinux" ]]; then
 handel_arch_based_app_installer
