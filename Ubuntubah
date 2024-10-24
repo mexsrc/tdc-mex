@@ -1,0 +1,40 @@
+# This Code Will Activate The Ubuntu Ci 
+#!/data/data/com.termux/files/usr/bin/bash
+
+release_code=${1:-"jammy"}
+
+now="$(date +%D)"
+
+output_file="$PREFIX/etc/proot-distro/ubuntu-ci-${release_code}.sh"
+
+echo "Getting release information..."
+
+sha256sums=$(curl https://cloud-images.ubuntu.com/${release_code}/current/SHA256SUMS)
+
+echo "Writing distribution information..."
+
+function get_sha256sum() {
+    arch="$1"
+    line=$(echo "$sha256sums" | grep "$arch-root.tar.xz")
+    sha256sum=$(echo "$line" | cut -d " " -f 1)
+    echo "$sha256sum"
+}
+
+cat << EOF > "$output_file"
+DISTRO_NAME="Ubuntu Cloud Image"
+DISTRO_COMMENT="Ubuntu ${release_code} Cloud Image release. SHA256SUMS updated at ${now}."
+
+TARBALL_URL['aarch64']="https://cloud-images.ubuntu.com/${release_code}/current/${release_code}-server-cloudimg-arm64-root.tar.xz"
+TARBALL_SHA256['aarch64']="$(get_sha256sum arm64)"
+TARBALL_URL['arm']="https://cloud-images.ubuntu.com/${release_code}/current/${release_code}-server-cloudimg-armhf-root.tar.xz"
+TARBALL_SHA256['arm']="$(get_sha256sum armhf)"
+TARBALL_URL['x86_64']="https://cloud-images.ubuntu.com/${release_code}/current/${release_code}-server-cloudimg-amd64-root.tar.xz"
+TARBALL_SHA256['x86_64']="$(get_sha256sum amd64)"
+
+TARBALL_STRIP_OPT=0
+EOF
+
+echo "Done!"
+echo "To install: proot-distro install ubuntu-ci-${release_code}"
+echo "Note: Checksums change with image updates."
+echo "      If you are unable to install due to a checksum mismatch, run the script again."
