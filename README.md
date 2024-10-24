@@ -26,7 +26,7 @@
    - :camera: Image Editor: Gimp / Inkscape
    - :link: More...
 - :package: Install apps like libreoffice _(apps that are not avilable in termux by default)_
-- :link: Now with Ubuntu CI Jammy
+- :desktop_computer: Now with Ubuntu CI Jammy
 - :link: And much more...
 <br>
 
